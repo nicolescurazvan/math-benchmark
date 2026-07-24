@@ -1,0 +1,8 @@
+#include <iostream>
+
+#include "prime.h"
+
+int main()
+{
+    return 0;
+}
