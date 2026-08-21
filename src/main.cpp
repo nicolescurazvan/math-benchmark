@@ -1,8 +1,63 @@
 #include <iostream>
-
+#include <chrono>
 #include "prime.h"
+#include "euler.h"
 
+const char filler[] = "------------------------------------------\n";
+
+void print(std::vector<size_t> &vec)
+{
+    for (size_t x: vec)
+    {
+        std::cout << x << " ";
+    }
+    std::cout << std::endl;
+}
 int main()
 {
+    //------------------------------------------------
+
+    /*size_t N[] = {1'000'000'000, 2'000'000'000, 3'000'000'000, 4'000'000'000, 6'000'000'000,\
+        8'000'000'000, 12'000'000'000, 16'000'000'000, 24'000'000'000};
+    
+    std::cout << "Segmented sieve - single threaded\n"<< filler;
+    for (size_t n: N)
+    {
+        auto start = std::chrono::steady_clock::now();
+        size_t count = ver1::primes_st(n);
+        auto end = std::chrono::steady_clock::now();
+        auto t = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); 
+        std::cout << "n = " << n << ": " << count << " primes found in ";
+        std::cout << (double)t.count() / 1000 << " seconds\n";
+    }
+    std::cout << filler << "\n\n";
+    
+    std::cout << "Segmented sieve - single threaded, evens removed\n"<< filler;
+    for (size_t n: N)
+    {
+        auto start = std::chrono::steady_clock::now();
+        size_t count = ver2::primes_st(n);
+        auto end = std::chrono::steady_clock::now();
+        auto t = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); 
+        std::cout << "n = " << n << ": " << count << " primes found in ";
+        std::cout << (double)t.count() / 1000 << " seconds\n";
+    }
+    std::cout << filler << "\n\n";*/
+
+    //---------------------------------------------
+    //---------------------------------------------
+
+    size_t N2[] = {400, 700, 1000, 1200};
+    std::cout << "Euler conjecture disprover - classical\n"<< filler;
+    for (size_t n: N2)
+    {
+        auto start = std::chrono::steady_clock::now();
+        size_t count = disprover(n);
+        auto end = std::chrono::steady_clock::now();
+        auto t = std::chrono::duration_cast<std::chrono::milliseconds>(end - start); 
+        std::cout << "n = " << n << ": " << count << " tuples found in ";
+        std::cout << (double)t.count() / 1000 << " seconds\n";
+    }
+    std::cout << filler << "\n\n";
     return 0;
 }

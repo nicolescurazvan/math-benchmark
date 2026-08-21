@@ -4,33 +4,64 @@
 #include <cstddef>
 #include <thread>
 
-// Base case
-std::vector<size_t> eratosthenes(size_t n)
+
+// Base case (n must be multiple of 8)
+std::vector<size_t> ver1::eratosthenes(size_t n)
 {
-    std::vector<unsingned char> sieve(n >> 3, 0xff);
-    unsigned char mask[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80};
+    std::vector<size_t> primes;
+    std::vector<bool> sieve(n, true);
     size_t i, j;
     for (i = 2; i * i < n; i++)
     {
-        if (sieve[i >> 3] & mask[i & 7])
+        if (sieve[i])
         {
             for (j = i * i; j < n; j += i)
-                sieve[j >> 3] ^= mask[j & 7];
+                sieve[j] = false;
         }
     }
 
-    std::vector<size_t> primes;
     for (i = 2; i < n; i++)
     {
-        if (sieve[i >> 3] & mask[i & 7])
+        if (sieve[i])
             primes.push_back(i);
     }
     return primes;
 }
 
-// Sieving
-size_t sieve(std::vector<size_t> &primes, size_t low, size_t high);
+// Sieving (All numbers must be multiples of 8)
+void ver1::sieve(std::vector<size_t> &primes, size_t &count, size_t low, size_t len, size_t step, size_t end)
+{
+    std::vector<bool> chunk(len);
+    while (low < end)
+    {
+        std::fill(chunk.begin(), chunk.end(), true);
+        size_t high = std::min(end, low + len);
+
+        for (size_t p: primes)
+        {
+            size_t index = p - low % p;
+            if (index == p)
+                index = 0;
+            
+            for (; index < high - low; index += p)
+                chunk[index] = false;
+        }
+
+        for (size_t i = 0; i < high - low; i++)
+            count += chunk[i];
+        
+        low += step;
+    }
+}
 
 // Prime finding (timed in seconds)
-size_t primes_st(int seconds);
-size_t primes_mt(int seconds, int threads);
+size_t ver1::primes_st(size_t limit)
+{
+    std::vector<size_t> primes = ver1::eratosthenes(BASE_SIEVE);
+    size_t count = primes.size();
+    ver1::sieve(primes, count, BASE_SIEVE, BASE_SIEVE, BASE_SIEVE, limit);
+    return count;
+}
+
+
+size_t ver1::primes_mt(size_t limit, int threads);
