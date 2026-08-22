@@ -33,14 +33,3 @@ size_t disprover(size_t n)
     }
     return find;
 }
-
-void filter(uchar base, std::vector<uchar[5]> &classes)
-{
-    std::map<uchar, std::vector<uchar>> powers;
-    for (uchar i = 0; i < base; i++)
-    {
-        size_t x = i;
-        uchar y = (uchar)power5(x % base);
-        powers[y].push_back(i);
-    }
-}

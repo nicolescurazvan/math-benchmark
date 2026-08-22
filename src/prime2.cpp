@@ -64,4 +64,22 @@ size_t ver2::primes_st(size_t limit)
 }
 
 
-size_t ver2::primes_mt(size_t limit, int threads);
+size_t ver2::primes_mt(size_t limit, int threads)
+{
+    std::vector<size_t> primes = ver2::eratosthenes(BASE_SIEVE);
+    size_t count = 1 + primes.size();
+    
+    std::vector<std::thread> workers;
+    std::vector<size_t> cnt(threads, 0);
+    for (size_t i = 0; i < threads; i++)
+    {
+        workers.emplace_back(ver2::sieve, std::ref(primes), std::ref(cnt[i]),\
+            BASE_SIEVE * (i + 1), BASE_SIEVE, BASE_SIEVE * threads, limit);
+    }
+    for (std::thread& t: workers)
+       t.join(); 
+    
+    for (size_t x: cnt)
+        count += x;
+    return count;
+}
